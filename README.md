@@ -21,7 +21,7 @@ You can install `read_csv_excel` using pip:
 pip install df-csv-excel
 ```
 
-pypi page link is [here] (https://pypi.org/project/df-csv-excel/)
+pypi page link is here:(https://pypi.org/project/df-csv-excel/)
 
 ## Usage
 
