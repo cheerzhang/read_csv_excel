@@ -29,7 +29,7 @@ pypi page link is here:(https://pypi.org/project/df-csv-excel/)
 from df_csv_excel import read_data 
 
 df = read_data.read_data_by_path('a.xlsx')
-df['name'] = read_data.get_feature_from_json(df, 'json_column', 'key_name')
+df['name'] = read_data.get_feature_from_json(df, 'json_column', ['key_name1', 'key_name2', 'key_name3])
 ```
 
 ## Contributing
