@@ -37,18 +37,21 @@ def read_data_by_path(file_path):
 import json
 
 # function to get value of node in json
-def process_json(row, key_name):
+def process_json(row, key_names):
     try:
         parsed_json = json.loads(row)
-        if key_name in parsed_json:
-            return parsed_json[key_name]
-        else:
-            return None
-    except (json.JSONDecodeError, TypeError):
+        value = parsed_json
+        for key in key_names:
+            if key in value:
+                value = value[key]
+            else:
+                return None
+        return value
+    except (json.JSONDecodeError, TypeError, KeyError):
         return None
 
-def get_feature_from_json(df, json_column_name, key_name):
-    df['json_feature'] = df[json_column_name].apply(process_json, args=(key_name,))
+def get_feature_from_json(df, json_column_name, key_names):
+    df['json_feature'] = df[json_column_name].apply(process_json, args=(key_names,))
     return df['json_feature'].values
 
 
