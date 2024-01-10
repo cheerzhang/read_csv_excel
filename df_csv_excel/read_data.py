@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import pandas as pd   
+import pandas as pd
 
 
 #####################################################
@@ -28,6 +28,28 @@ def read_data_by_path(file_path):
             df_test = None
         return df_test  
     return None
+
+     
+
+################################################################
+#              Get value from df's json column                 #
+################################################################
+import json
+
+# function to get value of node in json
+def process_json(row, key_name):
+    try:
+        parsed_json = json.loads(row)
+        if key_name in parsed_json:
+            return parsed_json[key_name]
+        else:
+            return None
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+def get_feature_from_json(df, json_column_name, key_name):
+    df['json_feature'] = df[json_column_name].apply(process_json, args=(key_name,))
+    return df['json_feature'].values
 
 
 def greet(name):
