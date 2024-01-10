@@ -1,34 +1,34 @@
 #!/usr/bin/env python
 import pandas as pd
-
+import os
 
 #####################################################
 #           Read csv or excel file as df            #
 #####################################################
 def remove_current_directory_prefix(file_path):
-    # Check if the file path starts with "./"
     if file_path.startswith("./"):
-        # Remove the leading "./" and return the modified path
         return file_path[2:]
     else:
-        # If the path doesn't start with "./", return it unchanged
         return file_path
 
 
 def read_data_by_path(file_path):
-    if file_path is not None:
-        file_predix = remove_current_directory_prefix(file_path)
-        file_predix = file_path.split('.')[1]
-        if file_predix == 'csv':
-            df_test = pd.read_csv(file_path)
-        if file_predix == 'xlsx':
-            df_test = pd.read_excel(file_path)
-        else:
-            print(f"this function can only handle csv and excel file.")
-            df_test = None
-        return df_test  
-    return None
+    if file_path:
+        file_prefix = remove_current_directory_prefix(file_path)
+        _, file_extension = os.path.splitext(file_prefix.lower())
 
+        # Mapping file extensions to corresponding read functions
+        read_functions = {'.csv': pd.read_csv, '.xlsx': pd.read_excel}
+
+        if file_extension in read_functions:
+            try:
+                df_test = read_functions[file_extension](file_path)
+                return df_test
+            except Exception as e:
+                print(f"Error reading file: {e}")
+        else:
+            print("This function can only handle csv and excel files.")
+    return None
      
 
 ################################################################
