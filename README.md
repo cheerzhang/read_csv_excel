@@ -23,7 +23,7 @@ pip install df-csv-excel
 
 pypi page link is here:(https://pypi.org/project/df-csv-excel/)
 
-## Usage
+## Usage read and process data
 
 ```
 from df_csv_excel import read_data 
@@ -31,6 +31,15 @@ from df_csv_excel import read_data
 df = read_data.read_data_by_path('a.xlsx')
 df['name'] = read_data.get_feature_from_json(df, 'json_column', ['key_name1', 'key_name2', 'key_name3])
 df['time_column'] = read_data.foramt_date_column(df, 'date')
+```
+
+## Usage plot data
+
+```
+from df_csv_excel import read_data, plot_data 
+
+df = read_data.read_data_by_path('a.xlsx')
+plot_data.plot_histgram(df, 'column_name')
 ```
 
 ## Contributing

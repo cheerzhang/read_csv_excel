@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='df-csv-excel',
-    version='0.1.5',
+    version='0.1.6',
     author="ZhangLe",
     author_email="zhangle@gmail.com",
     description="Commonly used functions for Data Scientists",
@@ -26,6 +26,7 @@ setuptools.setup(
     install_requires=[
         'pandas>=0.25.1',
         'numpy>=1.21.5',
+        'plotly >= 5.18.0'
     ],
     python_requires=">=3.9",
 )
