@@ -26,7 +26,9 @@ setuptools.setup(
     install_requires=[
         'pandas>=0.25.1',
         'numpy>=1.21.5',
-        'plotly >= 5.18.0'
+        'plotly >= 5.18.0',
+        'matplotlib >= 3.7.1',
+        'SciPy >= 1.11.4'
     ],
     python_requires=">=3.9",
 )
