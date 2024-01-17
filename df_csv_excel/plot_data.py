@@ -55,7 +55,8 @@ def check_normal_distribution(df, column_name):
             "Anderson-Darling Test": {
                 "Statistic": result.statistic,
                 "Critical Values": result.critical_values
-            }
+            },
+            "fig": plt
         }
     else:
         print(f'There is no {column_name} in the dataframe, the dataframe has columns: {df.columns.values}')
