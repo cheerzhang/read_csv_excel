@@ -27,7 +27,7 @@ def plot_histgram(df, column_name, parameter_root = 0, parameter_log = False):
 
 
 def check_normal_distribution(df, column_name):
-    if column_name in df.column.values:
+    if column_name in df.columns.values:
         data = df[column_name]
         plt.figure(figsize=(12, 6))
         # Histogram
@@ -58,6 +58,7 @@ def check_normal_distribution(df, column_name):
             }
         }
     else:
-        print(f'There is no {column_name} in the dataframe, the dataframe has columns: {df.column.values}')
+        print(f'There is no {column_name} in the dataframe, the dataframe has columns: {df.columns.values}')
+        return  None
 
     
