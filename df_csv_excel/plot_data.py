@@ -39,16 +39,10 @@ def check_normal_distribution(df, column_name):
         stats.probplot(data, dist="norm", plot=plt)
         plt.title('QQ Plot')
         plt.show()
-        print("Mean:", data.mean())
-        print("Standard Deviation:", data.std())
-        print("Skewness:", data.skew())
-        print("Kurtosis:", data.kurtosis())
         # Shapiro-Wilk test
         stat, p_value = shapiro(data)
-        print(f"Shapiro-Wilk Test: Statistic={stat}, p-value={p_value}")
         # Anderson-Darling test
         result = anderson(data)
-        print(f"Anderson-Darling Test: Statistic={result.statistic}, Critical Values={result.critical_values}")
         return {
             "mean": data.mean(),
             "Standard Deviation": data.std(),
