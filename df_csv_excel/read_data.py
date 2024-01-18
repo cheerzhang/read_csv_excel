@@ -55,13 +55,17 @@ def get_feature_from_json(df, json_column_name, key_names):
     return df['json_feature'].values
 
 
-def foramt_date_column(df, date_column_name, format='%Y-%m-%d %H:%M:%S'):
-    try:
-        df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=format)
-        return df['date_column'].values
-    except Exception as e:
-        print(e)
-        return None
+def foramt_date_column(df, date_column_name, format=None):
+    # format='%Y-%m-%d %H:%M:%S'
+    if format is None:
+        df['birthdate'] = pd.to_datetime(df['birthdate'], errors='coerce')
+    else:
+        try:
+            df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=format)
+            return df['date_column'].values
+        except Exception as e:
+            print(e)
+            return None
             
 def greet(name):
     return f"Hello, {name}!"
