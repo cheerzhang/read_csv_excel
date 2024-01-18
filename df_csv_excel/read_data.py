@@ -66,6 +66,16 @@ def foramt_date_column(df, date_column_name, format=None):
         except Exception as e:
             print(e)
             return None
-            
+
+
+def format_numeric_column(df, numeric_column_name):
+    try:
+        df['numric_column'] = df[numeric_column_name].apply(lambda x: int(x) if x.isdigit() else 0)
+        return df['numric_column'].values
+    except Exception as e:
+        print(e)
+        return None
+
+          
 def greet(name):
     return f"Hello, {name}!"
