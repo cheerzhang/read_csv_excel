@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='df-csv-excel',
-    version='0.1.17',
+    version='0.1.18',
     author="ZhangLe",
     author_email="zhangle@gmail.com",
     description="Commonly used functions for Data Scientists",
