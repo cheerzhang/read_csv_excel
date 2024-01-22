@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pandas as pd
-import os
+import os, re
 
 #####################################################
 #           Read csv or excel file as df            #
@@ -62,7 +62,22 @@ def get_feature_from_json(df, json_column_name, key_names):
 def foramt_date_column(df, date_column_name, format=None):
     # format='%Y-%m-%d %H:%M:%S'
     if format is None:
-        df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce')
+        try:
+            df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce')
+            return df['date_column'].values
+        except Exception as e:
+            match = re.search(r'Parsing dates in (.+?) format', str(e))
+            if match:
+                date_format = match.group(1)
+                try:
+                    df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=date_format)
+                    return df['date_column'].values
+                except Exception as e:
+                    print(e)
+                    return None
+            else:
+                print(e)
+                return None
     else:
         try:
             df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=format)
