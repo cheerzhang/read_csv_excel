@@ -103,5 +103,19 @@ def format_numeric_column(df, numeric_column_name):
 
 
 
+
+##########################################################
+#                                                        #
+#       get lastest row base on duplicate column         #
+#                                                        #
+##########################################################
+def get_latest_row_by_column(df, date_column, duplicate_column):
+    df[date_column] = pd.to_datetime(df[date_column])
+    df_sorted = df.sort_values(date_column, ascending=False)
+    df_unique_latest = df_sorted.drop_duplicates(duplicate_column)
+    df_unique_latest = df_unique_latest.reset_index(drop=True)
+    return df_unique_latest
+
+
 def greet(name):
     return f"Hello, {name}!"

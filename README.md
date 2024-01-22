@@ -30,6 +30,7 @@ pypi page link is here:(https://pypi.org/project/df-csv-excel/)
 
 ## Usage read and process data
 
+Here is some examples for the functions, for more details, please refer to (https://pypi.org/project/df-csv-excel/)   
 ```
 from df_csv_excel import read_data 
 
