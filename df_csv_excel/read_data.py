@@ -59,36 +59,37 @@ def get_feature_from_json(df, json_column_name, key_names):
 
 
 
-def foramt_date_column(df, date_column_name, format=None):
-    # format='%Y-%m-%d %H:%M:%S'
-    if format is None:
+def parse_dates(df, date_column_name, format=None):
+    def apply_date_parser(date_parser, format=None):
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", UserWarning)
-                df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce')
-            return df['date_column'].values
-        except Exception as e:
-            match = re.search(r'Parsing dates in (.+?) format', str(e))
-            if match:
-                date_format = match.group(1)
-                try:
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", UserWarning)
-                        df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=date_format)
-                    return df['date_column'].values
-                except Exception as e:
-                    print(e)
-                    return None
-            else:
-                print(e)
-                return None
-    else:
-        try:
-            df['date_column'] = pd.to_datetime(df[date_column_name], errors='coerce', format=format)
+                df['date_column'] = date_parser(df[date_column_name], errors='coerce', format=format)
             return df['date_column'].values
         except Exception as e:
             print(e)
             return None
+
+    if format is None:
+        try:
+            # Attempt parsing with default settings
+            return apply_date_parser(pd.to_datetime)
+        except Exception as e:
+            # If default parsing fails, try to extract and use the format from the error
+            match = re.search(r'Parsing dates in (.+?) format', str(e))
+            if match:
+                date_format = match.group(1)
+                return apply_date_parser(pd.to_datetime, format=date_format)
+            else:
+                print(e)
+                return None
+    else:
+        # Parse with the specified format
+        return apply_date_parser(pd.to_datetime, format=format)
+
+# Example usage:
+# parse_dates(df, 'date_column')
+# parse_dates(df, 'date_column', format='%d/%m/%Y %H:%M:%S')
 
 
 
