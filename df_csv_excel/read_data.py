@@ -59,6 +59,9 @@ def get_feature_from_json(df, json_column_name, key_names):
 
 
 
+# Example usage:
+# parse_dates(df, 'date_column')
+# parse_dates(df, 'date_column', format='%d/%m/%Y %H:%M:%S')
 def parse_dates(df, date_column_name, format=None):
     def apply_date_parser(date_parser, format=None):
         try:
@@ -87,9 +90,6 @@ def parse_dates(df, date_column_name, format=None):
         # Parse with the specified format
         return apply_date_parser(pd.to_datetime, format=format)
 
-# Example usage:
-# parse_dates(df, 'date_column')
-# parse_dates(df, 'date_column', format='%d/%m/%Y %H:%M:%S')
 
 
 
