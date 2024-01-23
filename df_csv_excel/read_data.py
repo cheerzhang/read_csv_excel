@@ -103,6 +103,26 @@ def format_numeric_column(df, numeric_column_name):
 
 
 
+###############################################################
+#                                                             #
+#       get email domain and predix from email column         #
+#                                                             #
+###############################################################
+def get_email_host(df, email_column='email'):
+    if email_column not in df.columns:
+        raise ValueError(f"'{email_column}' column not found in the DataFrame.")
+    df[email_column] = df[email_column].fillna('').str.lower()
+    df['email_domain'] = ''
+    df['email_prefix'] = ''
+    # check for non-empty email addresses
+    mask_non_empty_email = df[email_column] != ''
+    df.loc[mask_non_empty_email, 'email_domain'] = df[mask_non_empty_email][email_column].str.split('@').str[1]
+    df.loc[mask_non_empty_email, 'email_prefix'] = df[mask_non_empty_email][email_column].str.split('@').str[0]
+    df['email_domain'] = df['email_domain'].str.lower()
+    df['email_prefix'] = df['email_prefix'].str.lower()
+    return df['email_prefix'].values, df['email_domain'].values
+
+
 
 ##########################################################
 #                                                        #
