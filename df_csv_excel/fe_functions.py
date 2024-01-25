@@ -130,8 +130,7 @@ def calculate_iv(data, feature, target, num_bins=10):
 
     # Check if there are any levels in the feature with zero counts for both target values
     if grouped_data[grouped_data[target] == 0].empty or grouped_data[grouped_data[target] == 1].empty:
-        print(f"Warning: One or both target values have zero counts for some levels of the feature.")
-        return None
+        raise ValueError(f"Warning: One or both target values have zero counts for some levels of the feature.")
 
     # Pivot the table to get counts for each target value
     pivot_table = grouped_data.pivot(index=feature+'_bins', columns=target, values='count').fillna(0)
@@ -145,8 +144,7 @@ def calculate_iv(data, feature, target, num_bins=10):
 
     # Check if any of the percentages are zero
     if (pivot_table['good_percentage'] == 0).any() or (pivot_table['bad_percentage'] == 0).any():
-        print(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
-        return None
+        raise ValueError(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
 
     pivot_table['WoE'] = np.log((pivot_table['good_percentage'] + epsilon) / (pivot_table['bad_percentage'] + epsilon))
     pivot_table['IV'] = (pivot_table['WoE'] * (pivot_table['good_percentage'] - pivot_table['bad_percentage'])).sum()
