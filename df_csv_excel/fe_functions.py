@@ -32,3 +32,45 @@ def significant_association_chi_square(df, column_category, column_target, alpha
     else:
         # independent
         return False
+
+
+
+
+# Calculate Jaccard similarity scores between two specified columns in a DataFrame.
+def get_similarity(df, column_str_1, column_str_2):
+    """
+    Calculate Jaccard similarity scores between two specified columns in a DataFrame.
+
+    Parameters:
+    - df (pd.DataFrame): The input DataFrame.
+    - column_str_1 (str): The name of the first column.
+    - column_str_2 (str): The name of the second column.
+
+    Returns:
+    - np.ndarray: An array of Jaccard similarity scores.
+
+    Raises:
+    - ValueError: If the DataFrame is empty or if one or more specified columns are not found.
+    """
+    # Check for empty DataFrame
+    if df.empty:
+        raise ValueError("DataFrame is empty.")
+
+    # Check for column existence
+    if column_str_1 not in df.columns or column_str_2 not in df.columns:
+        raise ValueError("One or more specified columns not found in the DataFrame.")
+
+    def jaccard_similarity(str1, str2):
+        # Check for missing or empty values
+        if not str1 or not str2:
+            return 0.0
+        a = set(str1)
+        b = set(str2)
+        c = a.intersection(b)
+        return float(len(c)) / (len(a) + len(b) - len(c))
+
+    # Use .loc for assignment
+    df.loc[:, 'similarity_score'] = df.apply(lambda row: jaccard_similarity(row[column_str_1], row[column_str_2]), axis=1)
+
+    # Return similarity scores as a NumPy array
+    return df['similarity_score'].values
