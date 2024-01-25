@@ -96,6 +96,28 @@ def calculate_iv(data, feature, target, num_bins=10):
 
     Returns:
     - Information Value (IV) for the feature.
+
+    This function calculates the Information Value (IV) for a given feature in a binary classification task.
+    It discretizes the continuous feature into bins, calculates WoE and IV, and returns the overall IV.
+
+    The formula for IV is:
+
+    .. math::
+
+        IV = \sum_{i} \left( \text{WoE}_i \cdot (\text{good\_percentage}_i - \text{bad\_percentage}_i) \right)
+
+    where WoE (Weight of Evidence) is given by:
+
+    .. math::
+
+        \text{WoE}_i = \ln\left(\frac{\text{good\_percentage}_i + \epsilon}{\text{bad\_percentage}_i + \epsilon}\right)
+
+    and \(\epsilon\) is a small constant added to avoid division by zero.
+
+    The IV indicates the predictive power of the feature:
+    - IV < 0.02: Weak predictor
+    - 0.02 <= IV < 0.1: Medium predictor
+    - IV >= 0.1: Strong predictor
     """
 
     # Discretize the continuous feature into bins
