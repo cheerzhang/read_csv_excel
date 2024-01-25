@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from difflib import SequenceMatcher
 import re
+import matplotlib.pyplot as plt
 
 
 
@@ -152,5 +153,20 @@ def calculate_iv(data, feature, target, num_bins=10):
 
     # Calculate the total IV for the feature
     total_iv = pivot_table['IV'].sum()
+     
+    # bar chart
+    plt.figure(figsize=(10, 6))
+    bar_width = 0.4
 
-    return total_iv
+    # Bar chart for bad_percentage
+    plt.bar(np.arange(len(pivot_table)), pivot_table[0.0], width=bar_width, label='Label 0.0', color='blue')
+
+    # Bar chart for good_percentage (shifted to the right by bar_width)
+    plt.bar(np.arange(len(pivot_table)) + bar_width, pivot_table[1.0], width=bar_width, label='Label 1.0', color='orange')
+
+    plt.xlabel('Bins')
+    plt.ylabel('Count')  # Updated ylabel
+    plt.title('Bar Chart of Counts for Each Bin and Label')
+    plt.legend()
+
+    return total_iv, pivot_table, plt
