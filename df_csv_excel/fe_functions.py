@@ -85,7 +85,7 @@ def get_similarity(df, column_str_1, column_str_2):
 ################################   
 #         calculate IV         #
 ################################
-def calculate_iv(data, feature, target, num_bins=10):
+def calculate_iv(data, feature, target, custom_bins=None):
     """
     Calculate Information Value (IV) for a given feature in a binary classification model.
 
@@ -97,9 +97,9 @@ def calculate_iv(data, feature, target, num_bins=10):
         The name of the feature column for which IV is calculated.
     target : str
         The name of the binary target column.
-    num_bins : int, optional
-        The number of bins to discretize the continuous feature, default is 10.
-
+    :param custom_bins: list or array, optional
+        Custom bin edges for discretizing the feature. If None, automatic binning is used.
+    
     Returns:
     --------
     total_iv : float
@@ -129,9 +129,13 @@ def calculate_iv(data, feature, target, num_bins=10):
         print("Unable to calculate Information Value. Please check the data and parameters.")
 
     """
-    # Discretize the continuous feature into bins
-    data[feature+'_bins'] = pd.cut(data[feature], bins=num_bins, labels=False)
-
+    if custom_bins is None:
+        # Discretize the continuous feature into bins if custom_bins is not provided
+        data[feature+'_bins'] = pd.cut(data[feature], bins=10, labels=False)
+    else:
+        # Use custom bins if provided
+        data[feature+'_bins'] = pd.cut(data[feature], bins=custom_bins, labels=False)
+    
     # Create a DataFrame with the counts of each unique value in the binned feature
     data['count'] = 1
     grouped_data = data.groupby([feature+'_bins', target]).agg({'count': 'sum'}).reset_index()
