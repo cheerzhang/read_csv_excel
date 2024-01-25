@@ -87,40 +87,48 @@ def get_similarity(df, column_str_1, column_str_2):
 ################################
 def calculate_iv(data, feature, target, num_bins=10):
     """
-    Calculate Information Value (IV) for a given feature.
+    Calculate Information Value (IV) for a given feature in a binary classification model.
 
     Parameters:
-    - data: DataFrame containing the feature and target columns.
-    - feature: Name of the feature column.
-    - target: Name of the target column.
-    - num_bins: Number of bins to discretize the continuous feature.
+    -----------
+    data : pandas.DataFrame
+        The input DataFrame containing the feature and target columns.
+    feature : str
+        The name of the feature column for which IV is calculated.
+    target : str
+        The name of the binary target column.
+    num_bins : int, optional
+        The number of bins to discretize the continuous feature, default is 10.
 
     Returns:
-    - Information Value (IV) for the feature.
+    --------
+    total_iv : float
+        The total Information Value (IV) for the feature.
+    pivot_table : pandas.DataFrame
+        A DataFrame containing counts, percentages, WoE, and IV for each bin and target label.
+    plot : matplotlib.pyplot
+        The grouped bar chart showing counts for each bin and label.
 
-    This function calculates the Information Value (IV) for a given feature in a binary classification task.
-    It discretizes the continuous feature into bins, calculates WoE and IV, and returns the overall IV.
+    Raises:
+    -------
+    ValueError
+        If one or both target values have zero counts for some levels of the feature,
+        or if zero percentages are detected.
 
-    The formula for IV is:
+    Example:
+    --------
+    # Assuming 'df' is your DataFrame and 'feature_column' is the feature you want to evaluate
+    # 'target_column' is your binary target column
+    total_iv, pivot_table, plot = calculate_iv(df, 'email_firstname_score', 'Anomaly', num_bins=10)
 
-    .. math::
+    if total_iv is not None:
+        print(f"Information Value (IV) for the feature: {total_iv}")
+        # Show the plot
+        plot.show()
+    else:
+        print("Unable to calculate Information Value. Please check the data and parameters.")
 
-        IV = \sum_{i} \left( \text{WoE}_i \cdot (\text{good\_percentage}_i - \text{bad\_percentage}_i) \right)
-
-    where WoE (Weight of Evidence) is given by:
-
-    .. math::
-
-        \text{WoE}_i = \ln\left(\frac{\text{good\_percentage}_i + \epsilon}{\text{bad\_percentage}_i + \epsilon}\right)
-
-    and \(\epsilon\) is a small constant added to avoid division by zero.
-
-    The IV indicates the predictive power of the feature:
-    - IV < 0.02: Weak predictor
-    - 0.02 <= IV < 0.1: Medium predictor
-    - IV >= 0.1: Strong predictor
     """
-
     # Discretize the continuous feature into bins
     data[feature+'_bins'] = pd.cut(data[feature], bins=num_bins, labels=False)
 
