@@ -1,5 +1,6 @@
 from scipy.stats import chi2_contingency
 import pandas as pd
+import numpy as np
 from difflib import SequenceMatcher
 import re
 
@@ -76,3 +77,58 @@ def get_similarity(df, column_str_1, column_str_2):
 
     # Return similarity scores as a NumPy array
     return df['similarity_score'].values
+
+
+
+
+################################   
+#         calculate IV         #
+################################
+def calculate_iv(data, feature, target, num_bins=10):
+    """
+    Calculate Information Value (IV) for a given feature.
+
+    Parameters:
+    - data: DataFrame containing the feature and target columns.
+    - feature: Name of the feature column.
+    - target: Name of the target column.
+    - num_bins: Number of bins to discretize the continuous feature.
+
+    Returns:
+    - Information Value (IV) for the feature.
+    """
+
+    # Discretize the continuous feature into bins
+    data[feature+'_bins'] = pd.cut(data[feature], bins=num_bins, labels=False)
+
+    # Create a DataFrame with the counts of each unique value in the binned feature
+    data['count'] = 1
+    grouped_data = data.groupby([feature+'_bins', target]).agg({'count': 'sum'}).reset_index()
+
+    # Check if there are any levels in the feature with zero counts for both target values
+    if grouped_data[grouped_data[target] == 0].empty or grouped_data[grouped_data[target] == 1].empty:
+        print(f"Warning: One or both target values have zero counts for some levels of the feature.")
+        return None
+
+    # Pivot the table to get counts for each target value
+    pivot_table = grouped_data.pivot(index=feature+'_bins', columns=target, values='count').fillna(0)
+
+    # Calculate WoE and IV with a small constant added to avoid division by zero
+    epsilon = 0.001
+    pivot_table['total'] = pivot_table[0] + pivot_table[1]
+    pivot_table['percentage'] = (pivot_table['total'] / pivot_table['total'].sum()).round(4)
+    pivot_table['good_percentage'] = ((pivot_table[0] + epsilon) / pivot_table[0].sum()).round(4)
+    pivot_table['bad_percentage'] = ((pivot_table[1] + epsilon) / pivot_table[1].sum()).round(4)
+
+    # Check if any of the percentages are zero
+    if (pivot_table['good_percentage'] == 0).any() or (pivot_table['bad_percentage'] == 0).any():
+        print(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
+        return None
+
+    pivot_table['WoE'] = np.log((pivot_table['good_percentage'] + epsilon) / (pivot_table['bad_percentage'] + epsilon))
+    pivot_table['IV'] = (pivot_table['WoE'] * (pivot_table['good_percentage'] - pivot_table['bad_percentage'])).sum()
+
+    # Calculate the total IV for the feature
+    total_iv = pivot_table['IV'].sum()
+
+    return total_iv
