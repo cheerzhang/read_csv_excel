@@ -63,6 +63,8 @@ def get_feature_from_json(df, json_column_name, key_names):
 # parse_dates(df, 'date_column')
 # parse_dates(df, 'date_column', format='%d/%m/%Y %H:%M:%S')
 def parse_dates(df, date_column_name, format=None):
+    if date_column_name not in df.columns:
+        raise ValueError(f"'{date_column_name}' column not found in the DataFrame.")
     def apply_date_parser(date_parser, format=None):
         try:
             with warnings.catch_warnings():
