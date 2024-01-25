@@ -54,8 +54,9 @@ def process_json(row, key_names):
 
 
 def get_feature_from_json(df, json_column_name, key_names):
-    df.loc[:, 'json_feature'] = df[json_column_name].apply(process_json, args=(key_names,))
-    return df['json_feature'].values
+    df_copy = df.copy()
+    df_copy.loc[:, 'json_feature'] = df[json_column_name].apply(process_json, args=(key_names,))
+    return df_copy['json_feature'].values
 
 
 
