@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import pandas as pd
 import os, re, warnings
+from datetime import datetime
+
 
 #####################################################
 #           Read csv or excel file as df            #
@@ -138,6 +140,37 @@ def get_latest_row_by_column(df, date_column, duplicate_column):
     df_unique_latest = df_sorted.drop_duplicates(duplicate_column)
     df_unique_latest = df_unique_latest.reset_index(drop=True)
     return df_unique_latest
+
+
+
+##########################################################
+#                                                        #
+#       get age on birthday column                       #
+#                                                        #
+##########################################################
+def calculate_age(df, birthdate_column):
+    """
+    calculate_age Function Documentation:
+
+    Calculate ages based on birthdates in a DataFrame.
+
+    Parameters:
+    - df (pd.DataFrame): DataFrame containing birthdate data.
+    - birthdate_column (str): Name of the column containing birthdates.
+
+    Returns:
+    - np.ndarray: Array of age values.
+    """
+
+    def calculate_age(row):
+        current_date = datetime.now()
+        age = current_date.year - row[birthdate_column].year
+        if row[birthdate_column].month > current_date.month:
+            age -= 1
+        return age
+    df['age'] = df.apply(calculate_age, axis=1)
+    return df['age'].values
+
 
 
 def greet(name):
