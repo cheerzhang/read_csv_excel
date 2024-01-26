@@ -156,7 +156,8 @@ def calculate_iv(data, feature, target, custom_bins=None):
 
     # Check if any of the percentages are zero
     if (pivot_table['good_percentage'] == 0).any() or (pivot_table['bad_percentage'] == 0).any():
-        raise ValueError(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
+        return None, pivot_table, None
+        # raise ValueError(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
 
     pivot_table['WoE'] = np.log((pivot_table['good_percentage'] + epsilon) / (pivot_table['bad_percentage'] + epsilon))
     pivot_table['IV'] = pivot_table['WoE'] * (pivot_table['good_percentage'] - pivot_table['bad_percentage'])
