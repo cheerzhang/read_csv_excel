@@ -62,4 +62,62 @@ def check_normal_distribution(df, column_name):
         print(f'There is no {column_name} in the dataframe, the dataframe has columns: {df.columns.values}')
         return  None
 
+
+#############################################################
+#           Binary Classification Result                    #
+#############################################################
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
+
+
+def binary_classification_eval(df, true_column, predict_column):
+    """
+    Evaluate binary classification performance.
+
+    Parameters:
+    - df (pd.DataFrame): DataFrame containing the true and predicted labels.
+    - true_column (str): Name of the column containing true class labels.
+    - predict_column (str): Name of the column containing predicted class labels.
+
+    Returns:
+    - dict: Dictionary containing evaluation metrics.
+    """
+    # Ensure columns exist in the DataFrame
+    assert true_column in df.columns, f"{true_column} column not found in DataFrame."
+    assert predict_column in df.columns, f"{predict_column} column not found in DataFrame."
+
+    # Extract true and predicted labels
+    y_true = df[true_column]
+    y_pred = df[predict_column]
+
+    # Compute confusion matrix
+    cm = confusion_matrix(y_true, y_pred)
+
+    # Calculate evaluation metrics
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
+
+    # Compute ROC curve
+    fpr, tpr, thresholds = roc_curve(y_true, y_pred)
     
+    # Calculate KS statistic
+    ks = max(tpr - fpr)
+
+    # Calculate Gini coefficient
+    gini = 2 * auc(fpr, tpr) - 1
+
+    # Create a dictionary to store the results
+    metrics_dict = {
+        'Confusion_Matrix': cm,
+        'Accuracy': accuracy,
+        'Precision': precision,
+        'Recall': recall,
+        'F1_Score': f1,
+        'KS_Statistic': ks,
+        'Gini_Coefficient': gini
+    }
+
+    return metrics_dict, tpr, fpr
+    
+
