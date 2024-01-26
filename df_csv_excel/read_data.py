@@ -162,13 +162,13 @@ def calculate_age(df, birthdate_column):
     - np.ndarray: Array of age values.
     """
 
-    def calculate_age(row):
+    def calculate_age_(row):
         current_date = datetime.now()
         age = current_date.year - row[birthdate_column].year
         if row[birthdate_column].month > current_date.month:
             age -= 1
         return age
-    df['age'] = df.apply(calculate_age, axis=1)
+    df['age'] = df.apply(calculate_age_, axis=1)
     return df['age'].values
 
 
