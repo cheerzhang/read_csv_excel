@@ -148,7 +148,7 @@ def calculate_iv(data, feature, target, custom_bins=None):
     pivot_table = grouped_data.pivot(index=feature+'_bins', columns=target, values='count').fillna(0)
 
     # Calculate WoE and IV with a small constant added to avoid division by zero
-    epsilon = 0.001
+    epsilon = 0
     pivot_table['total'] = pivot_table[0] + pivot_table[1]
     pivot_table['percentage'] = (pivot_table['total'] / pivot_table['total'].sum()).round(4)
     pivot_table['good_percentage'] = ((pivot_table[0] + epsilon) / pivot_table[0].sum()).round(4)
