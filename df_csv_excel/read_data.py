@@ -164,7 +164,7 @@ def calculate_age(df, birthdate_column):
 
     def calculate_age_(row):
         current_date = datetime.now()
-        age = current_date.year - row[birthdate_column].dt.year
+        age = current_date.year - row[birthdate_column].year
         if row[birthdate_column].month > current_date.month:
             age -= 1
         return age
