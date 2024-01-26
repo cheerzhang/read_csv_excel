@@ -159,7 +159,7 @@ def calculate_iv(data, feature, target, custom_bins=None):
         raise ValueError(f"Warning: Zero percentages detected. Adjust the epsilon value and check the data.")
 
     pivot_table['WoE'] = np.log((pivot_table['good_percentage'] + epsilon) / (pivot_table['bad_percentage'] + epsilon))
-    pivot_table['IV'] = (pivot_table['WoE'] * (pivot_table['good_percentage'] - pivot_table['bad_percentage'])).sum()
+    pivot_table['IV'] = pivot_table['WoE'] * (pivot_table['good_percentage'] - pivot_table['bad_percentage'])
 
     # Calculate the total IV for the feature
     total_iv = pivot_table['IV'].sum()
