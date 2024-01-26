@@ -86,8 +86,8 @@ def binary_classification_eval(df, true_column, predict_column):
     assert predict_column in df.columns, f"{predict_column} column not found in DataFrame."
 
     # Extract true and predicted labels
-    y_true = df[true_column].values
-    y_pred = df[predict_column].values
+    y_true = df[true_column]
+    y_pred = df[predict_column]
 
     # Compute confusion matrix
     cm = confusion_matrix(y_true, y_pred)
