@@ -8,6 +8,18 @@ import matplotlib.pyplot as plt
 from scipy.stats import shapiro, anderson
 
 
+#####################################################
+#                 Plot Pie Chart                    #
+#####################################################
+def plot_pie_chart(df, label_column, diff_data=[0, 1], diff_labels=['Good', 'Bad']):
+    autopct='%1.1f%%'
+    startangle=90
+    option_counts = df[label_column].value_counts().reindex(diff_data, fill_value=0)
+    fig, ax = plt.subplots()
+    ax.pie(option_counts, labels=diff_labels, autopct=autopct, startangle=startangle)
+    ax.axis('equal')
+    return fig, option_counts
+
 
 #####################################################
 #                 Plot histgram                    #
