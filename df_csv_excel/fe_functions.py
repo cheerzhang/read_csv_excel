@@ -181,3 +181,5 @@ def calculate_iv(data, feature, target, custom_bins=None):
     plt.legend()
 
     return total_iv, pivot_table, plt
+
+
